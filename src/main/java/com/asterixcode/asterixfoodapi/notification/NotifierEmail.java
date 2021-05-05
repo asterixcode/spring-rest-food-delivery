@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Profile("prod")
+@Profile("production")
 @NotifierType(UrgencyLevel.NOT_URGENT) // @Qualifier("email") // or @Primary
 @Component
 public class NotifierEmail implements Notifier {

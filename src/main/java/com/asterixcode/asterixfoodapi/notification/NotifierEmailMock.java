@@ -4,7 +4,7 @@ import com.asterixcode.asterixfoodapi.model.Client;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-@Profile("dev")
+@Profile("development")
 @NotifierType(UrgencyLevel.NOT_URGENT)
 @Component
 public class NotifierEmailMock implements Notifier {
