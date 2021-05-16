@@ -20,6 +20,11 @@ public class StateRepo implements StateRepository {
     }
 
     @Override
+    public State getBy(Long id) {
+        return manager.find(State.class, id);
+    }
+
+    @Override
     public State add(State state) {
         return manager.merge(state);
     }
