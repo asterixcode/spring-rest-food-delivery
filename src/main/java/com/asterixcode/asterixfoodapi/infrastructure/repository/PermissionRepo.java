@@ -5,6 +5,7 @@ import com.asterixcode.asterixfoodapi.domain.repository.PermissionRepository;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -23,6 +24,7 @@ public class PermissionRepo implements PermissionRepository {
         return manager.find(Permission.class, id);
     }
 
+    @Transactional
     @Override
     public Permission add(Permission permission) {
         return manager.merge(permission);

@@ -1,6 +1,6 @@
-insert into kitchen (id, name) values (1, 'Japanese');
-insert into kitchen (id, name) values (2, 'Italian');
-insert into kitchen (id, name) values (3, 'Thai');
+insert into kitchen (name) values ('Japanese');
+insert into kitchen (name) values ('Italian');
+insert into kitchen (name) values ('Thai');
 
 
 insert into restaurant (name, delivery_fee, kitchen_id) values ('TopSalmon Sushi', 50, 1);
@@ -20,9 +20,9 @@ insert into permission (name, description) values ('update_products', 'User have
 insert into permission (name, description) values ('remove_products', 'User have access to remove products');
 
 
-insert into state (id, name) values (1, 'Texas');
-insert into state (id, name) values (2, 'Florida');
-insert into state (id, name) values (3, 'California');
+insert into state (name) values ('Texas');
+insert into state (name) values ('Florida');
+insert into state (name) values ('California');
 
 
 insert into city (name, state_id) values ('Houston', 1);

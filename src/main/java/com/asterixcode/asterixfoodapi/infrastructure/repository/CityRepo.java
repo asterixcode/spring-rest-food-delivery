@@ -5,6 +5,7 @@ import com.asterixcode.asterixfoodapi.domain.repository.CityRepository;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -23,6 +24,7 @@ public class CityRepo implements CityRepository {
         return manager.find(City.class, id);
     }
 
+    @Transactional
     @Override
     public City add(City city) {
         return manager.merge(city);
