@@ -1,16 +1,17 @@
 package com.asterixcode.asterixfoodapi.api.controller;
 
 import com.asterixcode.asterixfoodapi.api.model.KitchenXmlWrapper;
+import com.asterixcode.asterixfoodapi.domain.exception.EntityInUseException;
+import com.asterixcode.asterixfoodapi.domain.exception.EntityNotFoundException;
 import com.asterixcode.asterixfoodapi.domain.model.Kitchen;
 import com.asterixcode.asterixfoodapi.domain.repository.KitchenRepository;
+import com.asterixcode.asterixfoodapi.domain.service.KitchenRegisterService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +20,13 @@ import java.util.List;
 @RequestMapping("/kitchens")
 public class KitchenController {
 
+    // repository only for consulting
     @Autowired
     private KitchenRepository kitchenRepository;
+
+    // any modification has to be through the Service
+    @Autowired
+    private KitchenRegisterService kitchenRegisterService;
 
     // return kitchen list as JSON (Spring standard)
     @GetMapping
@@ -58,37 +64,40 @@ public class KitchenController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Kitchen add(@RequestBody Kitchen kitchen){
-        return kitchenRepository.add(kitchen);
+        return kitchenRegisterService.save(kitchen);
     }
 
     @PutMapping("/{kitchenId}")
     public ResponseEntity<Kitchen> update(@PathVariable Long kitchenId, @RequestBody Kitchen kitchen){
-
-        Kitchen kitchenCurrent = kitchenRepository.getBy(kitchenId);
+        Kitchen kitchenCurrent = kitchenRepository.getBy(kitchenId); // repository only for consulting
 
         if (kitchenCurrent != null) {
             //kitchenCurrent.setName(kitchen.getName()); ..., instead, using BeanUtils below
             BeanUtils.copyProperties(kitchen, kitchenCurrent, "id"); //update all fields, ignoring id
-            kitchenRepository.add(kitchenCurrent);
+            kitchenCurrent = kitchenRegisterService.save(kitchenCurrent); // any modification has to be through the Service
             return ResponseEntity.ok(kitchenCurrent);
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{kitchenId}")
-    public ResponseEntity<Kitchen> delete(@PathVariable Long kitchenId){
+    public ResponseEntity<Kitchen> remove(@PathVariable Long kitchenId){
         try {
-            Kitchen kitchen = kitchenRepository.getBy(kitchenId);
+            kitchenRegisterService.delete(kitchenId);
+            return ResponseEntity.noContent().build();
 
-            if (kitchen != null) {
-                kitchenRepository.remove(kitchen);
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.notFound().build(); //404 Not Found if kitchenId not found
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            // return 409 Conflict when the kitchenToDelete is FK on Restaurant table
-            // (when one Restaurant is linked to a kitchenToDelete/the kitchen belongs (is FK) to a restaurant)
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build(); //404 Not Found
+
+        } catch (EntityInUseException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); //409 Conflict
         }
+
+//        } catch (DataIntegrityViolationException e){
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//            // return 409 Conflict when the kitchenToDelete is FK on Restaurant table
+//            // (when one Restaurant is linked to a kitchenToDelete/the kitchen belongs (is FK) to a restaurant)
+//            // this is an Infrastructure Exception
+//        }
     }
 }

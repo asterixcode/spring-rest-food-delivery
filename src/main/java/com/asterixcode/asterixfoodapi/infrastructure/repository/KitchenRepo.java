@@ -2,6 +2,7 @@ package com.asterixcode.asterixfoodapi.infrastructure.repository;
 
 import com.asterixcode.asterixfoodapi.domain.model.Kitchen;
 import com.asterixcode.asterixfoodapi.domain.repository.KitchenRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -33,8 +34,13 @@ public class KitchenRepo implements KitchenRepository {
 
     @Transactional
     @Override
-    public void remove(Kitchen kitchen){
-        kitchen = getBy(kitchen.getId());
+    public void remove(Long id){
+        Kitchen kitchen = getBy(id);
+
+        if (kitchen == null){
+            throw new EmptyResultDataAccessException(1); // 1 => expected size; 1 = at least one kitchen (as getting by id)
+            // it's an exception from Spring Framework, when trying to remove something and this doesn't exist.
+        }
         manager.remove(kitchen);
     }
 }
