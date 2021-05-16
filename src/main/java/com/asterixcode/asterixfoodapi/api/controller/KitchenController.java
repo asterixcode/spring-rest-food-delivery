@@ -42,8 +42,10 @@ public class KitchenController {
 
     @GetMapping("/{kitchenId}")
     public ResponseEntity<Kitchen> getBy(@PathVariable("kitchenId") Long id){
+        // consult the repo to check if exists
         Kitchen kitchen = kitchenRepository.getBy(id);
 
+        // if found: 200 OK, if not found: 404 Not Found
         if (kitchen != null){
             return ResponseEntity.ok(kitchen);
         }
