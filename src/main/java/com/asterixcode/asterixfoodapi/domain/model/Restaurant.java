@@ -24,6 +24,6 @@ public class Restaurant {
 
     //@JoinColumn(name = "kitchen_code")  -> to change column name for Foreign Key
     @ManyToOne //many restaurants have one kitchen
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "kitchen_id", nullable = false)
     private Kitchen kitchen;
 }
