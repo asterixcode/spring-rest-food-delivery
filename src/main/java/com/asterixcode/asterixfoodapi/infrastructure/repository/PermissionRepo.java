@@ -2,13 +2,13 @@ package com.asterixcode.asterixfoodapi.infrastructure.repository;
 
 import com.asterixcode.asterixfoodapi.domain.model.Permission;
 import com.asterixcode.asterixfoodapi.domain.repository.PermissionRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Repository
 public class PermissionRepo implements PermissionRepository {
 
     @PersistenceContext
