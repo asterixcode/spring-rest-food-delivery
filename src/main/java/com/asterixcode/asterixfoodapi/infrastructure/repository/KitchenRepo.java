@@ -3,14 +3,13 @@ package com.asterixcode.asterixfoodapi.infrastructure.repository;
 import com.asterixcode.asterixfoodapi.domain.model.Kitchen;
 import com.asterixcode.asterixfoodapi.domain.repository.KitchenRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Repository
 public class KitchenRepo implements KitchenRepository {
 
     @PersistenceContext
@@ -19,6 +18,14 @@ public class KitchenRepo implements KitchenRepository {
     @Override
     public List<Kitchen> listAll(){
         return manager.createQuery("from Kitchen", Kitchen.class).getResultList();
+    }
+
+    @Override
+    public List<Kitchen> getBy(String name) {
+        return manager
+                .createQuery("from Kitchen where name like :name", Kitchen.class) //JPQL; returning class for the getResultList()
+                .setParameter("name", "%" + name + "%") //binding the parameter name (%name% for the like)
+                .getResultList();
     }
 
     @Override
