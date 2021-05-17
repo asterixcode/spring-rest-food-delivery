@@ -2,13 +2,13 @@ package com.asterixcode.asterixfoodapi.infrastructure.repository;
 
 import com.asterixcode.asterixfoodapi.domain.model.City;
 import com.asterixcode.asterixfoodapi.domain.repository.CityRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Repository
 public class CityRepo implements CityRepository {
 
     @PersistenceContext
@@ -31,7 +31,7 @@ public class CityRepo implements CityRepository {
     }
 
     @Override
-    public void remove(City city) {
+    public void remove(Long id) {
 
     }
 }

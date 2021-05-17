@@ -9,5 +9,5 @@ public interface StateRepository {
     List<State> listAll();
     State getBy(Long id);
     State add(State state);
-    void remove(State state);
+    void remove(Long id);
 }
